@@ -1,0 +1,99 @@
+local A,B,C,D,E=game:GetService("Players"),game:GetService("Lighting"),game:GetService("TweenService"),game:GetService("RunService"),game:GetService("Players").LocalPlayer
+local F=false
+local G,H
+local I=Instance.new("ScreenGui")
+I.Name="JBAntiLagPremiumSnow";I.ResetOnSpawn=false;I.Parent=E:WaitForChild("PlayerGui")
+local J=Instance.new("Frame")
+J.Size=UDim2.new(0,220,0,110);J.Position=UDim2.new(0.5,-110,0.5,-55)
+J.BackgroundColor3=Color3.fromRGB(10,10,10);J.BackgroundTransparency=0.1;J.BorderSizePixel=0;J.ClipsDescendants=true;J.Parent=I
+local K=Instance.new("UICorner");K.CornerRadius=UDim.new(0,12);K.Parent=J
+local L=Instance.new("UIStroke");L.Thickness=4;L.Color=Color3.fromRGB(255,255,255);L.Transparency=1;L.Parent=J
+
+task.spawn(function()
+	while J.Parent do
+		local M=C:Create(L,TweenInfo.new(0.7,Enum.EasingStyle.Quad,Enum.EasingDirection.InOut),{Transparency=0.2})
+		local N=C:Create(L,TweenInfo.new(0.7,Enum.EasingStyle.Quad,Enum.EasingDirection.InOut),{Transparency=1})
+		M:Play();M.Completed:Wait()
+		N:Play();N.Completed:Wait()
+	end
+end)
+
+local O=Instance.new("TextLabel")
+O.Size=UDim2.new(1,0,0,30);O.BackgroundColor3=Color3.fromRGB(15,15,15);O.BackgroundTransparency=0.1
+O.Text="J.B ANTI LAG";O.Font=Enum.Font.GothamBold;O.TextSize=16;O.TextColor3=Color3.fromRGB(255,255,255)
+O.Parent=J
+local P=Instance.new("UICorner");P.CornerRadius=UDim.new(0,10);P.Parent=O
+
+local Q=Instance.new("TextButton")
+Q.Size=UDim2.new(0,22,0,22);Q.Position=UDim2.new(1,-27,0,4)
+Q.Text="X";Q.BackgroundColor3=Color3.fromRGB(25,25,25);Q.BackgroundTransparency=0.2
+Q.TextColor3=Color3.fromRGB(255,255,255);Q.Font=Enum.Font.GothamBold;Q.TextSize=14
+Q.Parent=O
+local R=Instance.new("UICorner");R.CornerRadius=UDim.new(0,6);R.Parent=Q
+Q.MouseButton1Click:Connect(function()I:Destroy()end)
+
+local S=Instance.new("TextButton")
+S.Size=UDim2.new(0.85,0,0,35);S.Position=UDim2.new(0.075,0,0.5,0)
+S.Text="ULTRA ANTI LAG";S.Font=Enum.Font.GothamBold;S.TextSize=14;S.TextColor3=Color3.fromRGB(255,255,255)
+S.BackgroundColor3=Color3.fromRGB(30,30,30);S.BackgroundTransparency=0.1;S.Parent=J
+local T=Instance.new("UICorner");T.CornerRadius=UDim.new(0,8);T.Parent=S
+
+S.MouseEnter:Connect(function()
+	C:Create(S,TweenInfo.new(0.2,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),
+	{BackgroundTransparency=0,Size=UDim2.new(0.87,0,0,38)}):Play()
+end)
+
+S.MouseLeave:Connect(function()
+	C:Create(S,TweenInfo.new(0.2,Enum.EasingStyle.Quad,Enum.EasingDirection.Out),
+	{BackgroundTransparency=0.1,Size=UDim2.new(0.85,0,0,35)}):Play()
+end)
+
+local U=false;local V;local W
+O.InputBegan:Connect(function(X)
+	if X.UserInputType==Enum.UserInputType.MouseButton1 or X.UserInputType==Enum.UserInputType.Touch then
+		U=true;V=X.Position;W=J.Position
+	end
+end)
+O.InputEnded:Connect(function(X)
+	if X.UserInputType==Enum.UserInputType.MouseButton1 or X.UserInputType==Enum.UserInputType.Touch then
+		U=false
+	end
+end)
+O.InputChanged:Connect(function(X)
+	if U then local Y=X.Position-V;J.Position=W+UDim2.new(0,Y.X,0,Y.Y)end
+end)
+
+local AA=Instance.new("Folder");AA.Name="SnowFolder";AA.Parent=J
+for i=1,15 do
+	local AB=Instance.new("Frame")
+	AB.Size=UDim2.new(0,6,0,6);AB.Position=UDim2.new(math.random(),0,math.random(),0)
+	AB.BackgroundColor3=Color3.fromRGB(255,255,255);AB.BackgroundTransparency=0.3;AB.BorderSizePixel=0;AB.AnchorPoint=Vector2.new(0.5,0.5)
+	AB.Parent=AA
+	local AC=Instance.new("UICorner");AC.CornerRadius=UDim.new(1,0);AC.Parent=AB
+end
+
+D.RenderStepped:Connect(function()
+	for _,AD in pairs(AA:GetChildren())do
+		local AE=AD.Position;local AF=0.001+math.random()/500
+		AD.Position=UDim2.new(AE.X.Scale,AE.X.Offset,AE.Y.Scale+AF,AE.Y.Offset)
+		if AD.Position.Y.Scale>1 then AD.Position=UDim2.new(math.random(),0,0,0)end
+	end
+end)
+
+S.MouseButton1Click:Connect(function()
+	B.Brightness=1;B.Ambient=Color3.fromRGB(70,70,70);B.OutdoorAmbient=Color3.fromRGB(90,90,90)
+	B.FogEnd=1e5;B.FogStart=1e5;B.GlobalShadows=false
+	for _,AE in pairs(B:GetChildren())do if AE:IsA("BloomEffect")or AE:IsA("SunRaysEffect")or AE:IsA("BlurEffect")or AE:IsA("ColorCorrectionEffect")or AE:IsA("DepthOfFieldEffect")then AE:Destroy()end end
+	settings().Rendering.QualityLevel=Enum.QualityLevel.Level01
+	for _,AE in pairs(workspace:GetDescendants())do
+		if AE:IsA("ParticleEmitter")or AE:IsA("Trail")or AE:IsA("Smoke")or AE:IsA("Fire")or AE:IsA("Sparkles")then AE.Enabled=false end
+		if AE:IsA("BasePart")then AE.Material=Enum.Material.Plastic;AE.Reflectance=0 end
+	end
+	for _,AE in pairs(A:GetPlayers())do
+		if AE.Character then
+			for _,AF in pairs(AE.Character:GetChildren())do
+				if AF:IsA("Accessory")then AF:Destroy() end
+			end
+		end
+	end
+end)
